@@ -307,7 +307,7 @@
   .exp-spline-container {
     position: sticky;
     top: 120px;
-    height: calc(100vh - 240px);
+    height: 480px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -324,13 +324,14 @@
   .exp-spline-card {
     width: 100%;
     height: 100%;
-    max-width: 600px;
+    max-width: 500px;
     background: transparent;
     border: none;
     box-shadow: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     border-radius: 0;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -338,13 +339,15 @@
     z-index: 2;
   }
   .exp-spline-card iframe {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    width: 140%;
+    height: 140%;
+    top: -20%;
+    left: -20%;
     border: none;
     display: block;
     mix-blend-mode: screen;
     pointer-events: auto;
-    clip-path: inset(8% 12% 5% 5%);
   }
 
   /* EDUCATION */
