@@ -89,91 +89,90 @@
   .marquee-track span::after { content: '◆'; color: var(--lime); font-size: 0.45rem; }
   @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
 
-  /* WORK & 3D TILT CARDS STACK */
+  /* WORK GLASSMORPHISM CARDS STACK */
   #work { background: var(--dark2); position: relative; }
   .work-grid {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0;
-    perspective: 1500px;
     padding-bottom: 50px;
   }
   .work-card {
-    background: var(--card);
+    background: rgba(18, 15, 30, 0.45);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     border-radius: 24px;
     overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     text-decoration: none;
     color: inherit;
     display: flex;
     flex-direction: row;
     width: 100%;
-    max-width: 920px;
-    height: 400px;
+    max-width: 1100px;
+    height: 460px;
     position: sticky;
     top: 130px;
     margin-bottom: 22vh;
-    transform-style: preserve-3d;
     will-change: transform;
     transform-origin: center center;
-    transform: var(--card-tilt, rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)) scale(var(--stack-scale, 1));
+    transform: translateY(0) scale(var(--stack-scale, 1));
     opacity: var(--stack-opacity, 1);
     filter: var(--stack-filter, none);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease-out;
+    transition: border-color 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                box-shadow 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                background-color 0.4s ease;
   }
   .work-card:last-child {
     margin-bottom: 0;
   }
   .work-card:hover {
-    border-color: rgba(208,255,0,0.32);
-    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 25px rgba(208,255,0,0.06);
+    background: rgba(26, 21, 44, 0.65);
+    border-color: rgba(208, 255, 0, 0.45);
+    transform: translateY(-8px) scale(calc(var(--stack-scale, 1) * 1.025));
+    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.85),
+                0 0 35px rgba(129, 22, 224, 0.28),
+                0 0 15px rgba(208, 255, 0, 0.12);
   }
   .work-img {
     width: 52% !important;
     height: 100% !important;
     overflow: hidden;
-    transform: translateZ(25px);
-    transition: transform 0.3s ease;
     flex-shrink: 0;
   }
   .work-img img {
     width: 100% !important;
     height: 100% !important;
     object-fit: cover;
-    transition: transform 0.5s ease;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
   }
   .work-card:hover .work-img img { transform: scale(1.05); }
   .work-info {
     width: 48% !important;
     height: 100% !important;
-    padding: 2.2rem;
+    padding: 3rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    transform: translateZ(40px);
-    transition: transform 0.3s ease;
   }
-  .work-cat { font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lime); margin-bottom: 0.3rem; font-weight: 500; }
-  .work-title { font-family: 'Sora', sans-serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.45rem; }
-  .work-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.68; font-weight: 300; }
-  .work-tags { display: flex; flex-wrap: wrap; gap: 0.38rem; margin-top: 0.85rem; }
-  .work-tag { background: var(--violet-dim); border: 1px solid rgba(129,22,224,0.28); border-radius: 4px; padding: 0.13rem 0.48rem; font-size: 0.65rem; color: #C07EF5; }
-  .work-card-shine {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12) 0%, transparent 60%);
-    z-index: 5;
-    mix-blend-mode: overlay;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  .work-card:hover .work-card-shine { opacity: 1; }
+  .work-cat { font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lime); margin-bottom: 0.4rem; font-weight: 500; }
+  .work-title { font-family: 'Sora', sans-serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 0.6rem; color: var(--white); }
+  .work-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.75; font-weight: 300; }
+  .work-tags { display: flex; flex-wrap: wrap; gap: 0.38rem; margin-top: 1rem; }
+  .work-tag { background: var(--violet-dim); border: 1px solid rgba(129, 22, 224, 0.28); border-radius: 4px; padding: 0.13rem 0.48rem; font-size: 0.65rem; color: #C07EF5; }
 
   /* EXPERIENCE timeline active glowing flows */
   #experience { background: var(--dark); position: relative; }
-  .exp-timeline-container { position: relative; max-width: 780px; margin-top: 2rem; }
+  .exp-columns-wrap {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 4rem;
+    align-items: start;
+    margin-top: 2rem;
+  }
+  .exp-timeline-container { position: relative; width: 100%; }
   .exp-timeline-line {
     position: absolute;
     left: 102px;
@@ -238,6 +237,40 @@
   
   .exp-tags { display: flex; flex-wrap: wrap; gap: 0.38rem; margin-top: 0.7rem; }
   .exp-tag { background: var(--lime-dim); border: 1px solid rgba(208,255,0,0.15); border-radius: 4px; padding: 0.12rem 0.44rem; font-size: 0.63rem; color: #B8E000; }
+
+  /* SPLINE ELEMENT COLUMN */
+  .exp-spline-container {
+    position: sticky;
+    top: 140px;
+    height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .exp-spline-card {
+    width: 100%;
+    height: 100%;
+    max-height: 520px;
+    background: rgba(18, 15, 30, 0.35);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(129, 22, 224, 0.1);
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+  .exp-spline-card:hover {
+    border-color: rgba(208, 255, 0, 0.3);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.65), 0 0 30px rgba(129, 22, 224, 0.2), 0 0 15px rgba(208, 255, 0, 0.08);
+  }
+  .exp-spline-card iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
 
   /* EDUCATION */
   #education { background: var(--dark); border-top: 1px solid rgba(255,255,255,0.03); }
@@ -324,6 +357,8 @@
     .skills-categories { grid-template-columns: 1fr; gap: 1.5rem; }
     .exp-item { grid-template-columns: 1fr; gap: 1rem; }
     .exp-timeline-line, .exp-timeline-progress, .exp-dot { display: none; }
+    .exp-columns-wrap { grid-template-columns: 1fr; gap: 2rem; }
+    .exp-spline-container { position: relative; top: 0; height: 380px; margin-top: 1rem; }
   }
 </style>
 </head>
@@ -480,11 +515,12 @@
   <h2>Work Experience</h2>
   <p class="section-sub">4+ years across global enterprise and startups — delivering high-impact programmatic design and marketing campaigns at scale.</p>
   
-  <div class="exp-timeline-container">
-    <div class="exp-timeline-line"></div>
-    <div class="exp-timeline-progress"></div>
-    
-    <div class="exp-list">
+  <div class="exp-columns-wrap">
+    <div class="exp-timeline-container">
+      <div class="exp-timeline-line"></div>
+      <div class="exp-timeline-progress"></div>
+      
+      <div class="exp-list">
 
       <div class="exp-item fade-up">
         <div class="exp-year">Nov 2024<br>– Present</div>
@@ -550,6 +586,13 @@
 
     </div>
   </div>
+  
+  <div class="exp-spline-container">
+    <div class="exp-spline-card">
+      <iframe src="https://app.spline.design/file/7dd82dc9-4060-4afb-b232-a420e061e8e5?view=preview" frameborder="0" width="100%" height="100%" allowfullscreen></iframe>
+    </div>
+  </div>
+</div>
 </section>
 
 <!-- EDUCATION -->
@@ -741,44 +784,7 @@
   }, { threshold: 0.1 });
   document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
 
-  // 3D CARD TILT ANIMATION LOGIC (Vanilla JS with Shine Effects)
   const workCards = document.querySelectorAll('.work-card');
-  workCards.forEach(card => {
-    let shine = card.querySelector('.work-card-shine');
-    if (!shine) {
-      shine = document.createElement('div');
-      shine.className = 'work-card-shine';
-      card.appendChild(shine);
-    }
-
-    card.addEventListener('mousemove', e => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      const width = rect.width;
-      const height = rect.height;
-      
-      // Calculate smooth tilt values (-12 to +12deg max for neat control)
-      const rotateX = -((y - height / 2) / height) * 12;
-      const rotateY = ((x - width / 2) / width) * 12;
-      
-      card.style.setProperty('--card-tilt', `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`);
-      
-      const percentX = (x / width) * 100;
-      const percentY = (y / height) * 100;
-      shine.style.background = `radial-gradient(circle at ${percentX}% ${percentY}%, rgba(255, 255, 255, 0.16) 0%, transparent 65%)`;
-    });
-
-    card.addEventListener('mouseleave', () => {
-      card.style.setProperty('--card-tilt', 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)');
-      card.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
-    });
-
-    card.addEventListener('mouseenter', () => {
-      card.style.transition = 'none';
-    });
-  });
 
   // DYNAMIC EXPERIENCE TIMELINE AND SCROLL PROGRESS LOGIC
   const timelineContainer = document.querySelector('.exp-timeline-container');
