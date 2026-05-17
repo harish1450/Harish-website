@@ -32,8 +32,9 @@
     background: rgba(9,8,13,0.88); backdrop-filter: blur(16px);
     border-bottom: 1px solid rgba(208,255,0,0.07);
   }
-  .nav-logo { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 1.1rem; letter-spacing: -0.03em; color: var(--white); text-decoration: none; }
-  .nav-logo span { color: var(--lime); }
+  .nav-logo { display: flex; align-items: center; text-decoration: none; transition: transform 0.2s ease; }
+  .nav-logo:hover { transform: scale(1.03); }
+  .nav-logo img { height: 28px; width: auto; display: block; filter: drop-shadow(0 0 6px rgba(208,255,0,0.15)); }
   nav ul { list-style: none; display: flex; gap: 2.4rem; }
   nav ul a { color: var(--muted); font-size: 0.8rem; text-decoration: none; letter-spacing: 0.07em; text-transform: uppercase; transition: color 0.2s; font-weight: 400; }
   nav ul a:hover { color: var(--lime); }
@@ -88,39 +89,188 @@
   .marquee-track span::after { content: '◆'; color: var(--lime); font-size: 0.45rem; }
   @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
 
-  /* WORK */
-  #work { background: var(--dark2); }
-  .work-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.3rem; }
-  .work-card { background: var(--card); border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.3s, border-color 0.3s; text-decoration: none; color: inherit; display: block; }
-  .work-card:hover { transform: translateY(-6px); border-color: rgba(208,255,0,0.28); }
-  .work-card.featured { grid-column: span 2; }
-  .work-img { width: 100%; aspect-ratio: 16/10; overflow: hidden; }
-  .work-card.featured .work-img { aspect-ratio: 16/9; }
-  .work-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-  .work-card:hover .work-img img { transform: scale(1.04); }
-  .work-info { padding: 1.1rem 1.3rem 1.4rem; }
+  /* WORK & 3D TILT CARDS STACK */
+  #work { background: var(--dark2); position: relative; }
+  .work-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    perspective: 1500px;
+    padding-bottom: 50px;
+  }
+  .work-card {
+    background: var(--card);
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 920px;
+    height: 400px;
+    position: sticky;
+    top: 130px;
+    margin-bottom: 22vh;
+    transform-style: preserve-3d;
+    will-change: transform;
+    transform-origin: center center;
+    transform: var(--card-tilt, rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)) scale(var(--stack-scale, 1));
+    opacity: var(--stack-opacity, 1);
+    filter: var(--stack-filter, none);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease-out;
+  }
+  .work-card:last-child {
+    margin-bottom: 0;
+  }
+  .work-card:hover {
+    border-color: rgba(208,255,0,0.32);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 25px rgba(208,255,0,0.06);
+  }
+  .work-img {
+    width: 52% !important;
+    height: 100% !important;
+    overflow: hidden;
+    transform: translateZ(25px);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+  }
+  .work-img img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .work-card:hover .work-img img { transform: scale(1.05); }
+  .work-info {
+    width: 48% !important;
+    height: 100% !important;
+    padding: 2.2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transform: translateZ(40px);
+    transition: transform 0.3s ease;
+  }
   .work-cat { font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lime); margin-bottom: 0.3rem; font-weight: 500; }
-  .work-title { font-family: 'Sora', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 0.38rem; }
-  .work-desc { font-size: 0.79rem; color: var(--muted); line-height: 1.68; font-weight: 300; }
-  .work-tags { display: flex; flex-wrap: wrap; gap: 0.38rem; margin-top: 0.75rem; }
+  .work-title { font-family: 'Sora', sans-serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.45rem; }
+  .work-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.68; font-weight: 300; }
+  .work-tags { display: flex; flex-wrap: wrap; gap: 0.38rem; margin-top: 0.85rem; }
   .work-tag { background: var(--violet-dim); border: 1px solid rgba(129,22,224,0.28); border-radius: 4px; padding: 0.13rem 0.48rem; font-size: 0.65rem; color: #C07EF5; }
+  .work-card-shine {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12) 0%, transparent 60%);
+    z-index: 5;
+    mix-blend-mode: overlay;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .work-card:hover .work-card-shine { opacity: 1; }
 
-  /* EXPERIENCE */
-  #experience { background: var(--dark); }
-  .exp-list { max-width: 780px; }
-  .exp-item { display: grid; grid-template-columns: 110px 1fr; gap: 2rem; padding: 2rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); position: relative; }
-  .exp-item::before { content: ''; position: absolute; left: 102px; top: 0; bottom: 0; width: 1px; background: rgba(208,255,0,0.13); }
-  .exp-year { font-size: 0.7rem; color: var(--muted); padding-top: 0.2rem; line-height: 1.65; }
-  .exp-company { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.02rem; margin-bottom: 0.18rem; }
-  .exp-role { font-size: 0.78rem; color: var(--lime); margin-bottom: 0.55rem; font-weight: 500; }
-  .exp-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.78; font-weight: 300; }
-  .exp-dot { position: absolute; left: 97px; top: 2.35rem; width: 10px; height: 10px; background: var(--lime); border-radius: 50%; border: 2px solid var(--dark); box-shadow: 0 0 8px rgba(208,255,0,0.45); }
+  /* EXPERIENCE timeline active glowing flows */
+  #experience { background: var(--dark); position: relative; }
+  .exp-timeline-container { position: relative; max-width: 780px; margin-top: 2rem; }
+  .exp-timeline-line {
+    position: absolute;
+    left: 102px;
+    top: 15px;
+    bottom: 15px;
+    width: 2px;
+    background: rgba(255,255,255,0.06);
+    z-index: 1;
+  }
+  .exp-timeline-progress {
+    position: absolute;
+    left: 102px;
+    top: 15px;
+    height: 0%;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--lime), var(--violet));
+    box-shadow: 0 0 10px rgba(208,255,0,0.5), 0 0 20px rgba(129,22,224,0.3);
+    z-index: 2;
+    transition: height 0.1s ease-out;
+  }
+  .exp-list { display: flex; flex-direction: column; gap: 0.5rem; position: relative; }
+  .exp-item { display: grid; grid-template-columns: 110px 1fr; gap: 2.2rem; padding: 2rem 0; position: relative; z-index: 3; transition: opacity 0.4s ease; }
+  .exp-year { font-size: 0.72rem; color: var(--muted); padding-top: 0.2rem; line-height: 1.65; transition: color 0.3s ease; }
+  .exp-company { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.05rem; margin-bottom: 0.25rem; color: var(--white); transition: color 0.3s ease; }
+  .exp-role { font-size: 0.8rem; color: var(--lime); margin-bottom: 0.8rem; font-weight: 500; letter-spacing: 0.02em; }
+  .exp-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; margin-bottom: 1rem; }
+  .exp-bullets li { font-size: 0.82rem; color: var(--muted); line-height: 1.68; font-weight: 300; position: relative; padding-left: 1.1rem; transition: color 0.3s ease; }
+  .exp-bullets li::before { content: '◇'; position: absolute; left: 0; top: 0.1rem; color: var(--lime); font-size: 0.65rem; opacity: 0.85; }
+  .exp-dot {
+    position: absolute;
+    left: 97px;
+    top: 2.3rem;
+    width: 12px;
+    height: 12px;
+    background: var(--dark);
+    border: 2px solid rgba(255,255,255,0.18);
+    border-radius: 50%;
+    z-index: 4;
+    transition: background 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  }
+  
+  /* Timeline Active classes */
+  .exp-item.active .exp-dot {
+    background: var(--lime);
+    border-color: var(--lime);
+    box-shadow: 0 0 12px var(--lime);
+    transform: scale(1.2);
+  }
+  .exp-item.active .exp-year { color: var(--lime); font-weight: 500; }
+  .exp-item.active .exp-company { color: var(--white); }
+  .exp-item.active .exp-bullets li { color: #E3E0EE; }
+  
+  /* Hover dimmer effect */
+  .exp-timeline-container:hover .exp-item:not(:hover) { opacity: 0.45; }
+  .exp-item:hover .exp-dot {
+    background: var(--lime);
+    border-color: var(--lime);
+    box-shadow: 0 0 15px var(--lime);
+    transform: scale(1.3);
+  }
+  .exp-item:hover .exp-company { color: var(--lime); }
+  
   .exp-tags { display: flex; flex-wrap: wrap; gap: 0.38rem; margin-top: 0.7rem; }
   .exp-tag { background: var(--lime-dim); border: 1px solid rgba(208,255,0,0.15); border-radius: 4px; padding: 0.12rem 0.44rem; font-size: 0.63rem; color: #B8E000; }
 
-  /* SKILLS */
+  /* EDUCATION */
+  #education { background: var(--dark); border-top: 1px solid rgba(255,255,255,0.03); }
+  .edu-card {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 2.2rem;
+    max-width: 780px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .edu-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 4px; height: 100%;
+    background: linear-gradient(to bottom, var(--lime), var(--violet));
+  }
+  .edu-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(208,255,0,0.22);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  }
+  .edu-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem; }
+  .edu-degree { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.15rem; color: var(--white); }
+  .edu-date { font-size: 0.72rem; letter-spacing: 0.05em; color: var(--lime); font-weight: 500; }
+  .edu-college { font-size: 0.85rem; color: var(--muted); font-weight: 400; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .edu-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.78; font-weight: 300; }
+
+  /* SKILLS Grid Polish */
   #skills { background: var(--dark2); }
-  .skills-categories { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .skills-categories { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
   .skill-group-title { font-family: 'Sora', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 1rem; color: var(--white); display: flex; align-items: center; gap: 0.6rem; }
   .skill-group-badge { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--violet); background: var(--violet-dim); border: 1px solid rgba(129,22,224,0.25); padding: 0.16rem 0.52rem; border-radius: 4px; font-weight: 500; }
   .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.85rem; }
@@ -131,7 +281,7 @@
   .skill-bar { height: 2px; background: rgba(255,255,255,0.07); border-radius: 2px; margin-top: 0.65rem; overflow: hidden; }
   .fill-lime { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--lime), #9FFF00); }
   .fill-violet { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--violet), #C07EF5); }
-  .competency-pills { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 0.55rem; }
+  .competency-pills { margin-top: 2.2rem; display: flex; flex-wrap: wrap; gap: 0.55rem; }
   .cpill-lime { background: var(--lime-dim); border: 1px solid rgba(208,255,0,0.18); border-radius: 6px; padding: 0.28rem 0.75rem; font-size: 0.71rem; color: #B8E000; }
   .cpill-violet { background: var(--violet-dim); border: 1px solid rgba(129,22,224,0.27); border-radius: 6px; padding: 0.28rem 0.75rem; font-size: 0.71rem; color: #C07EF5; }
 
@@ -167,21 +317,24 @@
     #hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; }
     .hero-visual { display: none; }
     section { padding: 4rem 1.5rem; }
-    .work-grid, .testi-grid { grid-template-columns: 1fr; }
-    .work-card.featured { grid-column: span 1; }
-    .skills-categories { grid-template-columns: 1fr; }
-    .exp-item { grid-template-columns: 1fr; }
-    .exp-item::before, .exp-dot { display: none; }
+    .work-card { flex-direction: column !important; height: auto !important; top: 90px !important; margin-bottom: 12vh !important; }
+    .work-img { width: 100% !important; height: 180px !important; }
+    .work-info { width: 100% !important; height: auto !important; padding: 1.5rem !important; }
+    .testi-grid { grid-template-columns: 1fr; }
+    .skills-categories { grid-template-columns: 1fr; gap: 1.5rem; }
+    .exp-item { grid-template-columns: 1fr; gap: 1rem; }
+    .exp-timeline-line, .exp-timeline-progress, .exp-dot { display: none; }
   }
 </style>
 </head>
 <body>
 
 <nav>
-  <a href="#" class="nav-logo">H<span>.</span>D</a>
+  <a href="#" class="nav-logo"><img src="asset/logo.png" alt="HD Logo"></a>
   <ul>
     <li><a href="#work">Work</a></li>
     <li><a href="#experience">Experience</a></li>
+    <li><a href="#education">Education</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#testimonials">Testimonials</a></li>
     <li><a href="#contact" class="nav-cta">Hire Me</a></li>
@@ -211,7 +364,7 @@
   <div class="hero-visual">
     <div class="hero-img-wrap">
       <div class="hero-img-frame">
-        <img src="asset/hero-profile.jpeg.jpeg" alt="Harish Dhanasekaran">
+        <img src="asset/hero-profile.jpeg" alt="Harish Dhanasekaran">
         <div class="hero-img-overlay"></div>
       </div>
       <div class="hero-img-badge">
@@ -248,7 +401,7 @@
   <p class="section-sub">Brand work, digital campaigns, UI/UX design and motion across global and startup clients.</p>
   <div class="work-grid">
 
-    <a href="https://www.behance.net/gallery/235878151/Clixven-Brand-Guideline" target="_blank" class="work-card featured fade-up">
+    <a href="https://www.behance.net/gallery/235878151/Clixven-Brand-Guideline" target="_blank" class="work-card">
       <div class="work-img"><img src="asset/clixven-post-artboard-1.jpg" alt="Clixven Campaign"></div>
       <div class="work-info">
         <div class="work-cat">Brand Identity · Social Campaign</div>
@@ -258,7 +411,7 @@
       </div>
     </a>
 
-    <a href="https://www.behance.net/gallery/235906821/Trenads-Digital-solutions" target="_blank" class="work-card fade-up">
+    <a href="https://www.behance.net/gallery/235906821/Trenads-Digital-solutions" target="_blank" class="work-card">
       <div class="work-img"><img src="asset/clixven-post-artboard-2.jpg.jpg" alt="Clixven Post"></div>
       <div class="work-info">
         <div class="work-cat">Social Media Design</div>
@@ -268,7 +421,7 @@
       </div>
     </a>
 
-    <a href="https://www.behance.net/gallery/233730799/Redesign-Project-F1-studioz" target="_blank" class="work-card fade-up">
+    <a href="https://www.behance.net/gallery/233730799/Redesign-Project-F1-studioz" target="_blank" class="work-card">
       <div class="work-img" style="background:#120F1E;display:flex;align-items:center;justify-content:center;padding:1.5rem;">
         <div style="text-align:center;">
           <div style="font-family:'Sora',sans-serif;font-size:2rem;font-weight:800;color:#D0FF00;letter-spacing:-0.03em;">F1 Studioz</div>
@@ -283,7 +436,7 @@
       </div>
     </a>
 
-    <a href="https://www.behance.net/gallery/232380015/Email-Campaign" target="_blank" class="work-card fade-up">
+    <a href="https://www.behance.net/gallery/232380015/Email-Campaign" target="_blank" class="work-card">
       <div class="work-img" style="background:#1A1628;display:flex;align-items:center;justify-content:center;padding:2rem;">
         <div style="text-align:center;">
           <div style="width:46px;height:46px;background:rgba(208,255,0,0.1);border:1px solid rgba(208,255,0,0.25);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 0.6rem;font-size:1.25rem;">✉</div>
@@ -299,7 +452,7 @@
       </div>
     </a>
 
-    <a href="https://www.behance.net/gallery/232388537/Video-Ads-Promotions" target="_blank" class="work-card fade-up">
+    <a href="https://www.behance.net/gallery/232388537/Video-Ads-Promotions" target="_blank" class="work-card">
       <div class="work-img" style="background:linear-gradient(135deg,#120F1E,#2A0E5A);display:flex;align-items:center;justify-content:center;">
         <div style="text-align:center;">
           <div style="width:46px;height:46px;background:rgba(129,22,224,0.2);border:1px solid rgba(129,22,224,0.4);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 0.6rem;font-size:1.1rem;color:#C07EF5;">▶</div>
@@ -325,53 +478,92 @@
 <section id="experience">
   <div class="section-label">Career</div>
   <h2>Work Experience</h2>
-  <p class="section-sub">4+ years across global agencies, enterprise, and startups — delivering brand-consistent design at scale alongside international teams.</p>
-  <div class="exp-list">
+  <p class="section-sub">4+ years across global enterprise and startups — delivering high-impact programmatic design and marketing campaigns at scale.</p>
+  
+  <div class="exp-timeline-container">
+    <div class="exp-timeline-line"></div>
+    <div class="exp-timeline-progress"></div>
+    
+    <div class="exp-list">
 
-    <div class="exp-item fade-up">
-      <div class="exp-year">Nov 2024<br>– Present</div>
-      <div>
-        <div class="exp-dot"></div>
-        <div class="exp-company">Infosys BPM</div>
-        <div class="exp-role">Process Specialist — Design &amp; Global Campaigns</div>
-        <div class="exp-desc">Craft high-quality visual assets, video presentations, and email campaign materials for Philips international campaigns. Collaborate directly with global marketing leads in US and UK timezones — ensuring strict brand guideline adherence, zero-error delivery, and optimised design workflows under tight deadlines.</div>
-        <div class="exp-tags"><span class="exp-tag">Philips</span><span class="exp-tag">International Clients</span><span class="exp-tag">Email Campaigns</span><span class="exp-tag">Brand Compliance</span><span class="exp-tag">Video Presentations</span></div>
+      <div class="exp-item fade-up">
+        <div class="exp-year">Nov 2024<br>– Present</div>
+        <div>
+          <div class="exp-dot"></div>
+          <div class="exp-company">Infosys BPM (Client: Philips)</div>
+          <div class="exp-role">Senior Designer — Global Campaigns &amp; Design</div>
+          <ul class="exp-bullets">
+            <li>Own end-to-end design and execution of email campaigns and digital assets for Philips across Western Europe and North America, covering 2 major international markets.</li>
+            <li>Manage campaign setup, targeting, and performance report generation, acting as a hands-on campaign manager alongside the design role.</li>
+            <li>Managed end-to-end integrated marketing campaign delivery across email, display, and digital channels, coordinating assets across a 10–15 person cross-functional team on tight multi-market distribution schedules.</li>
+            <li>Collaborate daily with stakeholders across US and UK time zones, consistently meeting tight multi-market distribution schedules.</li>
+            <li>Drove workflow improvements that cut average asset turnaround time significantly, maintaining premium visual quality at scale.</li>
+          </ul>
+          <div class="exp-tags"><span class="exp-tag">Philips Campaign</span><span class="exp-tag">Email Strategy</span><span class="exp-tag">Cross-functional Lead</span><span class="exp-tag">Workflow Optimization</span><span class="exp-tag">Asset Production</span></div>
+        </div>
       </div>
-    </div>
 
-    <div class="exp-item fade-up">
-      <div class="exp-year">Jun 2023<br>– Nov 2024</div>
-      <div>
-        <div class="exp-dot"></div>
-        <div class="exp-company">Qik Digital</div>
-        <div class="exp-role">Mid-Senior Graphic &amp; Product Designer</div>
-        <div class="exp-desc">Spearheaded UI/UX design for Qik Meeting — a SaaS product — crafting intuitive user flows, wireframes, and high-fidelity interfaces in Figma. Simultaneously led social media ad campaigns for 5 clients, owning creative direction, visual identity systems, and performance-driven ad design across platforms.</div>
-        <div class="exp-tags"><span class="exp-tag">UI/UX · Figma</span><span class="exp-tag">Product Design</span><span class="exp-tag">User Flows</span><span class="exp-tag">5 Client Campaigns</span></div>
+      <div class="exp-item fade-up">
+        <div class="exp-year">Jun 2023<br>– Nov 2024</div>
+        <div>
+          <div class="exp-dot"></div>
+          <div class="exp-company">Qik Digital</div>
+          <div class="exp-role">Mid-Senior Graphic &amp; Product Designer</div>
+          <ul class="exp-bullets">
+            <li>Architected the complete visual identity and UI design system for Qik Meeting, an internal SaaS product, covering interface design, marketing collateral, and social media.</li>
+            <li>Designed a mailer campaign for Qik Meeting that achieved the highest open rate in company history, outperforming all previous campaigns by 75% — a record that remains unbeaten.</li>
+            <li>Overhauled the social media production process, increasing output from 5 posts/month to a consistent weekly cadence, sustaining that pace for 2+ months.</li>
+            <li>Delivered 300+ high-impact visual assets across 5+ major client accounts, balancing UI/UX work with performance marketing creative.</li>
+          </ul>
+          <div class="exp-tags"><span class="exp-tag">Figma UI/UX</span><span class="exp-tag">SaaS Design System</span><span class="exp-tag">Email Campaigns</span><span class="exp-tag">Creative Direction</span></div>
+        </div>
       </div>
-    </div>
 
-    <div class="exp-item fade-up">
-      <div class="exp-year">Dec 2022<br>– Jun 2023</div>
-      <div>
-        <div class="exp-dot"></div>
-        <div class="exp-company">Vumonic Datalabs</div>
-        <div class="exp-role">Graphic Designer</div>
-        <div class="exp-desc">Sole designer at an early-stage startup — drove complete design direction end-to-end. Delivered landing page design, digital ads, Instagram campaigns, HTML5 animated banners, greeting flyers, and presentation videos with full creative ownership.</div>
-        <div class="exp-tags"><span class="exp-tag">Landing Page</span><span class="exp-tag">HTML5 Ads</span><span class="exp-tag">Social Media</span><span class="exp-tag">Motion Video</span></div>
+      <div class="exp-item fade-up">
+        <div class="exp-year">Dec 2022<br>– Jun 2023</div>
+        <div>
+          <div class="exp-dot"></div>
+          <div class="exp-company">Vumonic Datalabs</div>
+          <div class="exp-role">Graphic Designer</div>
+          <ul class="exp-bullets">
+            <li>Sole designer at the startup, owning the full creative direction across landing page design, paid advertisements, Instagram content, HTML5 ads, and presentation videos.</li>
+            <li>Established the brand's visual language from scratch, creating reusable templates and design standards that gave the company a consistent public identity.</li>
+          </ul>
+          <div class="exp-tags"><span class="exp-tag">Startup Design</span><span class="exp-tag">Landing Pages</span><span class="exp-tag">HTML5 Animations</span><span class="exp-tag">Visual Guidelines</span></div>
+        </div>
       </div>
-    </div>
 
-    <div class="exp-item fade-up">
-      <div class="exp-year">Aug 2021<br>– Dec 2022</div>
-      <div>
-        <div class="exp-dot"></div>
-        <div class="exp-company">Deloitte Digital</div>
-        <div class="exp-role">Junior Graphic Designer</div>
-        <div class="exp-desc">Created animated digital ad layouts and programmatic banners for Google Display Network using Adobe Animate CC and Photoshop. Transformed static designs into dynamic campaign-ready animated assets for international clients — collaborating cross-functionally to optimise for engagement and conversion.</div>
-        <div class="exp-tags"><span class="exp-tag">Programmatic Banners</span><span class="exp-tag">Google Display</span><span class="exp-tag">Animate CC</span><span class="exp-tag">Animation</span></div>
+      <div class="exp-item fade-up">
+        <div class="exp-year">Aug 2021<br>– Dec 2022</div>
+        <div>
+          <div class="exp-dot"></div>
+          <div class="exp-company">Deloitte Digital</div>
+          <div class="exp-role">Junior Graphic Designer</div>
+          <ul class="exp-bullets">
+            <li>Delivered 500+ HTML5 display ad units for Australia and New Zealand markets via the Google Display Network, integrating motion graphics in Adobe Animate CC.</li>
+            <li>Engineered a new production method in Animate CC that reduced HTML5 banner build time from 4 hours to 2 hours, a 50% efficiency gain.</li>
+            <li>Operated as sole designer on several campaigns, managing the complete delivery pipeline independently from brief to live asset.</li>
+          </ul>
+          <div class="exp-tags"><span class="exp-tag">Programmatic Ads</span><span class="exp-tag">Animate CC</span><span class="exp-tag">Google Display Network</span><span class="exp-tag">Workflow Engineering</span></div>
+        </div>
       </div>
-    </div>
 
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-label">Education</div>
+  <h2>Academic Foundation</h2>
+  <p class="section-sub">A background in computer applications that bridges technical logic with high-end digital design systems.</p>
+  <div class="edu-card fade-up">
+    <div class="edu-header">
+      <div class="edu-degree">Bachelor of Computer Application (BCA)</div>
+      <div class="edu-date">Jun 2018 — May 2021</div>
+    </div>
+    <div class="edu-college">Bishop Heber College, Bharathidasan University</div>
+    <p class="edu-desc">Core studies focused on database management systems, software engineering principles, web technology fundamentals, and user experience design paradigms. Translates technical engineering methodologies straight into highly optimized digital campaign systems, programmatic workflows, and custom layout platforms.</p>
   </div>
 </section>
 
@@ -379,7 +571,7 @@
 <section id="skills">
   <div class="section-label">Toolkit</div>
   <h2>Skills &amp; Tools</h2>
-  <p class="section-sub">Expert-level command of the Adobe ecosystem, Figma, and motion tools — backed by strong UI/UX fundamentals and digital campaign production experience.</p>
+  <p class="section-sub">Expert-level command of design, motion, and UI systems — backed by automation tools, visual hierarchy, and programmatic web technologies.</p>
   <div class="skills-categories">
 
     <div>
@@ -434,6 +626,32 @@
       </div>
     </div>
 
+    <div>
+      <div class="skill-group-title">AI Design &amp; Automation <span class="skill-group-badge" style="color: var(--lime); background: var(--lime-dim); border-color: rgba(208,255,0,0.25);">Future</span></div>
+      <div class="skills-grid">
+        <div class="skill-card fade-up">
+          <div class="skill-name">Midjourney</div>
+          <div class="skill-level">Prompt Engineering · Art Direction</div>
+          <div class="skill-bar"><div class="fill-lime" style="width:90%"></div></div>
+        </div>
+        <div class="skill-card fade-up">
+          <div class="skill-name">Adobe Firefly</div>
+          <div class="skill-level">Generative Fill · Asset Scaling</div>
+          <div class="skill-bar"><div class="fill-lime" style="width:95%"></div></div>
+        </div>
+        <div class="skill-card fade-up">
+          <div class="skill-name">Magnific AI</div>
+          <div class="skill-level">Ultra Upscaling · Quality Enhancement</div>
+          <div class="skill-bar"><div class="fill-lime" style="width:85%"></div></div>
+        </div>
+        <div class="skill-card fade-up">
+          <div class="skill-name">ChatGPT &amp; Claude</div>
+          <div class="skill-level">Copy Ideation · Code Prototyping</div>
+          <div class="skill-bar"><div class="fill-lime" style="width:92%"></div></div>
+        </div>
+      </div>
+    </div>
+
   </div>
   <div class="competency-pills">
     <span class="cpill-lime">Typography &amp; Layout</span>
@@ -445,6 +663,9 @@
     <span class="cpill-violet">User Flow Mapping</span>
     <span class="cpill-violet">Component Systems</span>
     <span class="cpill-violet">UX Research</span>
+    <span class="cpill-violet">webflow</span>
+    <span class="cpill-violet">Framer</span>
+    <span class="cpill-violet">Google Ad Manager</span>
   </div>
 </section>
 
@@ -512,12 +733,128 @@
 <footer>© 2026 Harish Dhanasekaran &nbsp;·&nbsp; Graphic &amp; UI/UX Designer &nbsp;·&nbsp; India</footer>
 
 <script>
+  // FADE-IN ON SCROLL OBSERVER
   const obs = new IntersectionObserver((entries) => {
     entries.forEach((e, i) => {
       if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 75);
     });
   }, { threshold: 0.1 });
   document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+  // 3D CARD TILT ANIMATION LOGIC (Vanilla JS with Shine Effects)
+  const workCards = document.querySelectorAll('.work-card');
+  workCards.forEach(card => {
+    let shine = card.querySelector('.work-card-shine');
+    if (!shine) {
+      shine = document.createElement('div');
+      shine.className = 'work-card-shine';
+      card.appendChild(shine);
+    }
+
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const width = rect.width;
+      const height = rect.height;
+      
+      // Calculate smooth tilt values (-12 to +12deg max for neat control)
+      const rotateX = -((y - height / 2) / height) * 12;
+      const rotateY = ((x - width / 2) / width) * 12;
+      
+      card.style.setProperty('--card-tilt', `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`);
+      
+      const percentX = (x / width) * 100;
+      const percentY = (y / height) * 100;
+      shine.style.background = `radial-gradient(circle at ${percentX}% ${percentY}%, rgba(255, 255, 255, 0.16) 0%, transparent 65%)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.setProperty('--card-tilt', 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)');
+      card.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+    });
+
+    card.addEventListener('mouseenter', () => {
+      card.style.transition = 'none';
+    });
+  });
+
+  // DYNAMIC EXPERIENCE TIMELINE AND SCROLL PROGRESS LOGIC
+  const timelineContainer = document.querySelector('.exp-timeline-container');
+  const timelineProgress = document.querySelector('.exp-timeline-progress');
+  const expItems = document.querySelectorAll('.exp-item');
+
+  function updateTimelineProgress() {
+    if (!timelineContainer || !timelineProgress) return;
+    
+    const rect = timelineContainer.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+    
+    const containerTop = rect.top;
+    const containerHeight = rect.height;
+    
+    const triggerOffset = windowHeight * 0.72;
+    const fillMaxOffset = windowHeight * 0.35;
+    
+    const scrolledOffset = triggerOffset - containerTop;
+    
+    let percent = (scrolledOffset / containerHeight) * 100;
+    percent = Math.max(0, Math.min(100, percent));
+    
+    timelineProgress.style.height = `${percent}%`;
+    
+    expItems.forEach(item => {
+      const itemRect = item.getBoundingClientRect();
+      if (itemRect.top < windowHeight * 0.62) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+  }
+
+  // DYNAMIC STACKING AND SCROLL-COVER ENGINE
+  function updateCardStack() {
+    const windowHeight = window.innerHeight;
+    workCards.forEach((card, index) => {
+      const rect = card.getBoundingClientRect();
+      const stickyThreshold = 130; // Matches top: 130px in CSS
+      
+      if (rect.top <= stickyThreshold + 5) {
+        // Calculate scroll depth past the sticky threshold
+        const scrolledPast = stickyThreshold - rect.top;
+        // Fade & scale out over 360px of scroll depth
+        const progress = Math.max(0, Math.min(1, scrolledPast / 360));
+        
+        const scale = 1 - (progress * 0.06); // Scale down slightly (to 0.94)
+        const opacity = 1 - (progress * 0.55); // Dim opacity (to 0.45)
+        const blur = progress * 2.2; // Apply smooth blur (to 2.2px)
+        
+        card.style.setProperty('--stack-scale', scale);
+        card.style.setProperty('--stack-opacity', opacity);
+        card.style.setProperty('--stack-filter', `blur(${blur}px) brightness(${1 - progress * 0.3})`);
+      } else {
+        // Reset to default active state
+        card.style.setProperty('--stack-scale', '1');
+        card.style.setProperty('--stack-opacity', '1');
+        card.style.setProperty('--stack-filter', 'none');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', () => {
+    updateTimelineProgress();
+    updateCardStack();
+  }, { passive: true });
+  window.addEventListener('resize', () => {
+    updateTimelineProgress();
+    updateCardStack();
+  });
+  setTimeout(() => {
+    updateTimelineProgress();
+    updateCardStack();
+  }, 200);
 </script>
 </body>
 </html>
