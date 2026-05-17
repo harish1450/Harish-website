@@ -43,18 +43,18 @@
 
   /* HERO */
   #hero { min-height: 100vh; display: flex; align-items: center; justify-content: flex-start; padding: 8rem 4rem 4rem; position: relative; overflow: hidden; text-align: left; }
-  .hero-bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; filter: contrast(1.05) brightness(0.85); }
-  .hero-bg-overlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(9,8,13,0.95) 0%, rgba(9,8,13,0.3) 100%); z-index: 1; }
+  .hero-bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; filter: contrast(1.15) brightness(1.0) saturate(1.25); }
+  .hero-bg-overlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(9,8,13,0.88) 0%, rgba(9,8,13,0.4) 50%, transparent 100%); z-index: 1; }
   .hero-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: flex-start; max-width: 650px; margin-top: 2rem; }
-  .hero-tag { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(9,8,13,0.55); backdrop-filter: blur(12px); border: 1px solid rgba(208,255,0,0.25); border-radius: 100px; padding: 0.4rem 1.2rem; font-size: 0.73rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--lime); margin-bottom: 1.6rem; font-weight: 500; }
+  .hero-tag { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(9,8,13,0.65); backdrop-filter: blur(12px); border: 1px solid rgba(208,255,0,0.3); border-radius: 100px; padding: 0.4rem 1.2rem; font-size: 0.73rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--lime); margin-bottom: 1.6rem; font-weight: 500; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
   .hero-tag::before { content: ''; width: 6px; height: 6px; background: var(--lime); border-radius: 50%; animation: blink 1.6s infinite; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.12} }
-  h1 { font-family: 'Sora', sans-serif; font-size: clamp(3.2rem, 6vw, 6.2rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.035em; margin-bottom: 1.5rem; text-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+  h1 { font-family: 'Sora', sans-serif; font-size: clamp(3.2rem, 6vw, 6.2rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.035em; margin-bottom: 1.5rem; text-shadow: 0 10px 30px rgba(0,0,0,0.8); }
   h1 .accent { color: var(--lime); }
-  h1 .stroke { -webkit-text-stroke: 2px rgba(255,255,255,0.15); color: transparent; text-shadow: 0 0 40px rgba(129,22,224,0.4); }
-  .hero-desc { font-size: 1.05rem; color: rgba(255,255,255,0.85); line-height: 1.78; max-width: 580px; margin-bottom: 2.5rem; font-weight: 300; text-shadow: 0 4px 15px rgba(0,0,0,0.8); }
+  h1 .stroke { -webkit-text-stroke: 2px var(--white); color: transparent; text-shadow: 0 0 25px rgba(255,255,255,0.25); }
+  .hero-desc { font-size: 1.05rem; color: rgba(255,255,255,0.95); line-height: 1.78; max-width: 580px; margin-bottom: 2.5rem; font-weight: 300; text-shadow: 0 4px 15px rgba(0,0,0,0.9); }
   .hero-pills { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 0.6rem; margin-bottom: 2.5rem; }
-  .pill { background: rgba(18,15,30,0.65); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.12); border-radius: 100px; padding: 0.35rem 1rem; font-size: 0.75rem; color: var(--white); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+  .pill { background: rgba(18,15,30,0.7); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.2); border-radius: 100px; padding: 0.35rem 1rem; font-size: 0.75rem; color: var(--white); box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
   .hero-actions { display: flex; justify-content: flex-start; gap: 1rem; align-items: center; }
   .btn-primary { background: var(--lime); color: #09080D; padding: 0.85rem 2.2rem; border-radius: 8px; font-family: 'Sora', sans-serif; font-size: 0.9rem; font-weight: 700; text-decoration: none; transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s; box-shadow: 0 10px 20px -5px rgba(208,255,0,0.35); }
   .btn-primary:hover { opacity: 0.85; transform: translateY(-2px); box-shadow: 0 15px 25px -5px rgba(208,255,0,0.5); }
